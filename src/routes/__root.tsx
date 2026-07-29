@@ -8,6 +8,8 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Toaster } from "@/components/ui/sonner";
+import { HiringProvider } from "@/lib/hiring-store";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -77,19 +79,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "HireLoop — Jobs with instant AI interviews" },
+      {
+        name: "description",
+        content:
+          "Browse open roles, apply, and start a timed AI interview immediately. Recruiters get notified the moment a candidate matches.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: appCss,
+        href: "https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter+Tight:wght@400;500;600&display=swap",
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
@@ -114,13 +119,60 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function SiteHeader() {
+  const linkClass =
+    "rounded-full px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground";
+  return (
+    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur">
+      <div className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-3">
+        <Link to="/" className="flex items-center gap-2">
+          <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary font-display text-sm font-bold text-primary-foreground">
+            HL
+          </span>
+          <span className="font-display text-base font-semibold">HireLoop</span>
+        </Link>
+        <nav className="ml-auto flex items-center gap-1">
+          <Link to="/" className={linkClass} activeProps={{ className: "bg-secondary text-foreground" }}>
+            Jobs
+          </Link>
+          <Link
+            to="/assistant"
+            className={linkClass}
+            activeProps={{ className: "bg-secondary text-foreground" }}
+          >
+            Interview coach
+          </Link>
+          <Link
+            to="/recruiter"
+            className={linkClass}
+            activeProps={{ className: "bg-secondary text-foreground" }}
+          >
+            For recruiters
+          </Link>
+        </nav>
+      </div>
+    </header>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <HiringProvider>
+        <div className="flex min-h-screen flex-col">
+          <SiteHeader />
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <main className="flex-1">
+            <Outlet />
+          </main>
+          <footer className="border-t border-border/70 py-6 text-center text-xs text-muted-foreground">
+            HireLoop — demo hiring workspace. Nothing is stored; a refresh starts a clean session.
+          </footer>
+        </div>
+        <Toaster position="top-center" />
+      </HiringProvider>
     </QueryClientProvider>
   );
 }
