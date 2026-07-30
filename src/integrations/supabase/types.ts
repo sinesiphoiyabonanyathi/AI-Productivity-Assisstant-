@@ -14,7 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      generated_emails: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          purpose: string
+          recipient: string
+          subject: string
+          tone: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          purpose: string
+          recipient?: string
+          subject: string
+          tone?: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          purpose?: string
+          recipient?: string
+          subject?: string
+          tone?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      task_plans: {
+        Row: {
+          command: string
+          created_at: string
+          goal: string
+          id: string
+          tasks: Json
+          user_id: string
+        }
+        Insert: {
+          command?: string
+          created_at?: string
+          goal: string
+          id?: string
+          tasks?: Json
+          user_id: string
+        }
+        Update: {
+          command?: string
+          created_at?: string
+          goal?: string
+          id?: string
+          tasks?: Json
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
