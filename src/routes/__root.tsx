@@ -129,8 +129,6 @@ function RootShell({ children }: { children: ReactNode }) {
 function SiteHeader({ signedIn }: { signedIn: boolean }) {
   const router = useRouter();
   const { queryClient } = Route.useRouteContext();
-  const linkClass =
-    "rounded-full px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground";
 
   async function handleSignOut() {
     await queryClient.cancelQueries();
@@ -140,59 +138,32 @@ function SiteHeader({ signedIn }: { signedIn: boolean }) {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-5 py-3">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary font-display text-sm font-bold text-primary-foreground">
-            HL
-          </span>
-          <span className="font-display text-base font-semibold">HireLoop</span>
-        </Link>
-        <nav className="ml-auto flex flex-wrap items-center gap-1">
-          <Link to="/" className={linkClass} activeProps={{ className: "bg-secondary text-foreground" }}>
-            Jobs
-          </Link>
-          <Link
-            to="/assistant"
-            className={linkClass}
-            activeProps={{ className: "bg-secondary text-foreground" }}
+    <header className="sticky top-0 z-30 border-b border-border/70 bg-background/80 backdrop-blur">
+      <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-3 py-2.5 sm:px-5">
+        <SidebarTrigger className="shrink-0" />
+        <div className="min-w-0">
+          <p className="truncate font-display text-sm font-semibold sm:text-base">
+            HireLoop workspace
+          </p>
+          <p className="hidden truncate text-xs text-muted-foreground sm:block">
+            Jobs, timed AI interviews and recruiting tools in one place
+          </p>
+        </div>
+        {signedIn ? (
+          <button
+            onClick={handleSignOut}
+            className="shrink-0 rounded-full border border-border px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
           >
-            Interview coach
-          </Link>
+            Sign out
+          </button>
+        ) : (
           <Link
-            to="/recruiter"
-            className={linkClass}
-            activeProps={{ className: "bg-secondary text-foreground" }}
+            to="/auth"
+            className="shrink-0 rounded-full bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
           >
-            For recruiters
+            Sign in
           </Link>
-          <Link
-            to="/emails"
-            className={linkClass}
-            activeProps={{ className: "bg-secondary text-foreground" }}
-          >
-            Email generator
-          </Link>
-          <Link
-            to="/planner"
-            className={linkClass}
-            activeProps={{ className: "bg-secondary text-foreground" }}
-          >
-            Task planner
-          </Link>
-          {signedIn ? (
-            <button onClick={handleSignOut} className={linkClass}>
-              Sign out
-            </button>
-          ) : (
-            <Link
-              to="/auth"
-              className="rounded-full bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-            >
-              Sign in
-            </Link>
-          )}
-        </nav>
+        )}
       </div>
     </header>
   );
@@ -224,19 +195,28 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <HiringProvider>
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader signedIn={signedIn} />
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <main className="flex-1">
-            <Outlet />
-          </main>
-          <footer className="border-t border-border/70 py-6 text-center text-xs text-muted-foreground">
-            HireLoop — demo hiring workspace. Job browsing is open; the email generator and task
-            planner require an account.
-          </footer>
-        </div>
+        <SidebarProvider>
+          <div className="flex min-h-screen w-full">
+            <AppSidebar />
+            <div className="flex min-w-0 flex-1 flex-col">
+              <SiteHeader signedIn={signedIn} />
+              {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+              <main className="flex-1">
+                <Outlet />
+              </main>
+              <footer className="border-t border-border/70 px-4 py-6">
+                <AiDisclaimer className="mx-auto max-w-3xl" />
+                <p className="mt-3 text-center text-xs text-muted-foreground">
+                  HireLoop — demo hiring workspace. Job browsing is open; the email generator and
+                  task planner require an account.
+                </p>
+              </footer>
+            </div>
+          </div>
+        </SidebarProvider>
         <Toaster position="top-center" />
       </HiringProvider>
     </QueryClientProvider>
   );
 }
+
