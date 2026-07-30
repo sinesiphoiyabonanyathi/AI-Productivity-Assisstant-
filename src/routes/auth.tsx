@@ -40,7 +40,7 @@ export const Route = createFileRoute("/auth")({
 });
 
 function safePath(value: string | undefined) {
-  return value && value.startsWith("/") && !value.startsWith("//") ? value : "/workspace";
+  return value && value.startsWith("/") && !value.startsWith("//") ? value : "/emails";
 }
 
 function AuthPage() {
