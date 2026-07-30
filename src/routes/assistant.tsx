@@ -94,6 +94,9 @@ function Assistant() {
         </div>
       </div>
 
+      <AiDisclaimer className="mt-4" />
+
+
       <div className="panel mt-6 flex min-h-[62vh] flex-col">
         <div ref={scrollRef} className="flex-1 space-y-5 overflow-y-auto p-6">
           {chat.length === 0 ? (
