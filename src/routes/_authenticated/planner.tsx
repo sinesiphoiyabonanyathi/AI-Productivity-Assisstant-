@@ -8,6 +8,7 @@ import { createPlan, deletePlan, listPlans } from "@/lib/workspace.functions";
 import { useVoiceInput } from "@/lib/use-voice-input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { AiDisclaimer } from "@/components/ai-disclaimer";
 
 type PlanTask = { title: string; detail: string; priority: string; estimate: string };
 

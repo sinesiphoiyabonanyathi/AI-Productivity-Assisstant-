@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useHiring, type ChatMessage } from "@/lib/hiring-store";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { AiDisclaimer } from "@/components/ai-disclaimer";
 
 export const Route = createFileRoute("/assistant")({
   head: () => ({
