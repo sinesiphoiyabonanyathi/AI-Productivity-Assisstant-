@@ -7,9 +7,10 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { HiringProvider } from "@/lib/hiring-store";
+import { supabase } from "@/integrations/supabase/client";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -125,19 +126,29 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
-function SiteHeader() {
+function SiteHeader({ signedIn }: { signedIn: boolean }) {
+  const router = useRouter();
+  const { queryClient } = Route.useRouteContext();
   const linkClass =
     "rounded-full px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground";
+
+  async function handleSignOut() {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    router.navigate({ to: "/auth", replace: true });
+  }
+
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-3">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-5 py-3">
         <Link to="/" className="flex items-center gap-2">
           <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary font-display text-sm font-bold text-primary-foreground">
             HL
           </span>
           <span className="font-display text-base font-semibold">HireLoop</span>
         </Link>
-        <nav className="ml-auto flex items-center gap-1">
+        <nav className="ml-auto flex flex-wrap items-center gap-1">
           <Link to="/" className={linkClass} activeProps={{ className: "bg-secondary text-foreground" }}>
             Jobs
           </Link>
@@ -155,6 +166,32 @@ function SiteHeader() {
           >
             For recruiters
           </Link>
+          <Link
+            to="/emails"
+            className={linkClass}
+            activeProps={{ className: "bg-secondary text-foreground" }}
+          >
+            Email generator
+          </Link>
+          <Link
+            to="/planner"
+            className={linkClass}
+            activeProps={{ className: "bg-secondary text-foreground" }}
+          >
+            Task planner
+          </Link>
+          {signedIn ? (
+            <button onClick={handleSignOut} className={linkClass}>
+              Sign out
+            </button>
+          ) : (
+            <Link
+              to="/auth"
+              className="rounded-full bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+            >
+              Sign in
+            </Link>
+          )}
         </nav>
       </div>
     </header>
@@ -163,18 +200,39 @@ function SiteHeader() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+  const [signedIn, setSignedIn] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSignedIn(Boolean(data.session)));
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+      setSignedIn(Boolean(session));
+      router.invalidate();
+      if (event !== "SIGNED_OUT") {
+        queryClient.invalidateQueries();
+        const saved = sessionStorage.getItem("hireloop:redirect");
+        if (saved) {
+          sessionStorage.removeItem("hireloop:redirect");
+          router.navigate({ to: saved as "/emails", replace: true });
+        }
+      }
+    });
+    return () => sub.subscription.unsubscribe();
+  }, [queryClient, router]);
 
   return (
     <QueryClientProvider client={queryClient}>
       <HiringProvider>
         <div className="flex min-h-screen flex-col">
-          <SiteHeader />
+          <SiteHeader signedIn={signedIn} />
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <main className="flex-1">
             <Outlet />
           </main>
           <footer className="border-t border-border/70 py-6 text-center text-xs text-muted-foreground">
-            HireLoop — demo hiring workspace. Nothing is stored; a refresh starts a clean session.
+            HireLoop — demo hiring workspace. Job browsing is open; the email generator and task
+            planner require an account.
           </footer>
         </div>
         <Toaster position="top-center" />

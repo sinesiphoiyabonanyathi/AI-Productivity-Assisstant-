@@ -11,12 +11,16 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RecruiterRouteImport } from './routes/recruiter'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AssistantRouteImport } from './routes/assistant'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as JobsJobIdRouteImport } from './routes/jobs.$jobId'
 import { Route as InterviewJobIdRouteImport } from './routes/interview.$jobId'
 import { Route as ApiInterviewRouteImport } from './routes/api/interview'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as AuthenticatedPlannerRouteImport } from './routes/_authenticated/planner'
+import { Route as AuthenticatedEmailsRouteImport } from './routes/_authenticated/emails'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -28,9 +32,18 @@ const RecruiterRoute = RecruiterRouteImport.update({
   path: '/recruiter',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AssistantRoute = AssistantRouteImport.update({
   id: '/assistant',
   path: '/assistant',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -58,12 +71,25 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedPlannerRoute = AuthenticatedPlannerRouteImport.update({
+  id: '/planner',
+  path: '/planner',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEmailsRoute = AuthenticatedEmailsRouteImport.update({
+  id: '/emails',
+  path: '/emails',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/assistant': typeof AssistantRoute
+  '/auth': typeof AuthRoute
   '/recruiter': typeof RecruiterRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/emails': typeof AuthenticatedEmailsRoute
+  '/planner': typeof AuthenticatedPlannerRoute
   '/api/chat': typeof ApiChatRoute
   '/api/interview': typeof ApiInterviewRoute
   '/interview/$jobId': typeof InterviewJobIdRoute
@@ -72,8 +98,11 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/assistant': typeof AssistantRoute
+  '/auth': typeof AuthRoute
   '/recruiter': typeof RecruiterRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/emails': typeof AuthenticatedEmailsRoute
+  '/planner': typeof AuthenticatedPlannerRoute
   '/api/chat': typeof ApiChatRoute
   '/api/interview': typeof ApiInterviewRoute
   '/interview/$jobId': typeof InterviewJobIdRoute
@@ -82,9 +111,13 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/assistant': typeof AssistantRoute
+  '/auth': typeof AuthRoute
   '/recruiter': typeof RecruiterRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/_authenticated/emails': typeof AuthenticatedEmailsRoute
+  '/_authenticated/planner': typeof AuthenticatedPlannerRoute
   '/api/chat': typeof ApiChatRoute
   '/api/interview': typeof ApiInterviewRoute
   '/interview/$jobId': typeof InterviewJobIdRoute
@@ -95,8 +128,11 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/assistant'
+    | '/auth'
     | '/recruiter'
     | '/sitemap.xml'
+    | '/emails'
+    | '/planner'
     | '/api/chat'
     | '/api/interview'
     | '/interview/$jobId'
@@ -105,8 +141,11 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/assistant'
+    | '/auth'
     | '/recruiter'
     | '/sitemap.xml'
+    | '/emails'
+    | '/planner'
     | '/api/chat'
     | '/api/interview'
     | '/interview/$jobId'
@@ -114,9 +153,13 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/assistant'
+    | '/auth'
     | '/recruiter'
     | '/sitemap.xml'
+    | '/_authenticated/emails'
+    | '/_authenticated/planner'
     | '/api/chat'
     | '/api/interview'
     | '/interview/$jobId'
@@ -125,7 +168,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AssistantRoute: typeof AssistantRoute
+  AuthRoute: typeof AuthRoute
   RecruiterRoute: typeof RecruiterRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiChatRoute: typeof ApiChatRoute
@@ -150,11 +195,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RecruiterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/assistant': {
       id: '/assistant'
       path: '/assistant'
       fullPath: '/assistant'
       preLoaderRoute: typeof AssistantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -192,12 +251,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/planner': {
+      id: '/_authenticated/planner'
+      path: '/planner'
+      fullPath: '/planner'
+      preLoaderRoute: typeof AuthenticatedPlannerRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/emails': {
+      id: '/_authenticated/emails'
+      path: '/emails'
+      fullPath: '/emails'
+      preLoaderRoute: typeof AuthenticatedEmailsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedEmailsRoute: typeof AuthenticatedEmailsRoute
+  AuthenticatedPlannerRoute: typeof AuthenticatedPlannerRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedEmailsRoute: AuthenticatedEmailsRoute,
+  AuthenticatedPlannerRoute: AuthenticatedPlannerRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AssistantRoute: AssistantRoute,
+  AuthRoute: AuthRoute,
   RecruiterRoute: RecruiterRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiChatRoute: ApiChatRoute,
@@ -208,13 +296,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
