@@ -9,6 +9,9 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { AiDisclaimer } from "@/components/ai-disclaimer";
 import { HiringProvider } from "@/lib/hiring-store";
 import { supabase } from "@/integrations/supabase/client";
 
