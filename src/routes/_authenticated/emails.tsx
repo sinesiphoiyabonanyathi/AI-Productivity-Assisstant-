@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { AiDisclaimer } from "@/components/ai-disclaimer";
 
 const TONES = ["professional", "warm", "concise", "enthusiastic", "formal"];
 
@@ -77,6 +78,9 @@ function EmailsPage() {
           Describe what you need to say. Every draft is saved to your account.
         </p>
       </header>
+
+      <AiDisclaimer className="mt-5" />
+
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         <form

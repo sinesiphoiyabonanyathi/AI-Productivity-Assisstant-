@@ -8,6 +8,7 @@ import { createPlan, deletePlan, listPlans } from "@/lib/workspace.functions";
 import { useVoiceInput } from "@/lib/use-voice-input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { AiDisclaimer } from "@/components/ai-disclaimer";
 
 type PlanTask = { title: string; detail: string; priority: string; estimate: string };
 
@@ -80,6 +81,9 @@ function PlannerPage() {
           next week”, or type it instead.
         </p>
       </header>
+
+      <AiDisclaimer className="mt-5" />
+
 
       <form
         className="mt-8 rounded-2xl border border-border/70 bg-card p-5"

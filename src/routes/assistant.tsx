@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useHiring, type ChatMessage } from "@/lib/hiring-store";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { AiDisclaimer } from "@/components/ai-disclaimer";
 
 export const Route = createFileRoute("/assistant")({
   head: () => ({
@@ -92,6 +93,9 @@ function Assistant() {
           </p>
         </div>
       </div>
+
+      <AiDisclaimer className="mt-4" />
+
 
       <div className="panel mt-6 flex min-h-[62vh] flex-col">
         <div ref={scrollRef} className="flex-1 space-y-5 overflow-y-auto p-6">
