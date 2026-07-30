@@ -81,6 +81,9 @@ function PlannerPage() {
         </p>
       </header>
 
+      <AiDisclaimer className="mt-5" />
+
+
       <form
         className="mt-8 rounded-2xl border border-border/70 bg-card p-5"
         onSubmit={(e) => {
