@@ -15,7 +15,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Open roles — HireLoop" },
       {
         property: "og:description",
-        content: "Apply and interview in one sitting. Recruiters hear from us only when you match.",
+        content: "Browse open roles with full requirements and start a timed AI interview the moment you apply.",
       },
     ],
   }),

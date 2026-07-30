@@ -79,14 +79,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "HireLoop — Jobs with instant AI interviews" },
+      { title: "Open roles — HireLoop" },
       {
         name: "description",
         content:
-          "Browse open roles, apply, and start a timed AI interview immediately. Recruiters get notified the moment a candidate matches.",
+          "Browse open roles with full requirements and start a timed AI interview the moment you apply.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "Open roles — HireLoop" },
+      { name: "twitter:title", content: "Open roles — HireLoop" },
+      { property: "og:description", content: "Browse open roles with full requirements and start a timed AI interview the moment you apply." },
+      { name: "twitter:description", content: "Browse open roles with full requirements and start a timed AI interview the moment you apply." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/c77fe37b-9f53-44fa-bac4-8f59c3e6d8f8" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/c77fe37b-9f53-44fa-bac4-8f59c3e6d8f8" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
