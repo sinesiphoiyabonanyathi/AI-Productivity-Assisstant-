@@ -79,6 +79,9 @@ function EmailsPage() {
         </p>
       </header>
 
+      <AiDisclaimer className="mt-5" />
+
+
       <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         <form
           className="space-y-4 rounded-2xl border border-border/70 bg-card p-5"
