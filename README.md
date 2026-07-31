@@ -1,4 +1,5 @@
-# Hire Connect Pro
+AI-Powered-Assistant-
+
 
 lovable create web app that is going to have recruiting jobs with all the recuiments they want and if the person who wants to apply for the job the app should automaticlly start an online interview with time line  and it must have and chatbot section for the employees questions and answer for the interview
 
